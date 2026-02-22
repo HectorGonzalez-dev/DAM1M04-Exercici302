@@ -58,14 +58,25 @@ hbs.registerPartials(path.join(__dirname, 'views', 'partials'));
 app.get('/', async (req, res) => {
   try {
     // Obtenir les dades de la base de dades
-    const cursosRows = await db.query('SELECT id, nom, tematica FROM cursos ORDER BY id');
-    const filmsRows = await db.query('SELECT id, nom, tematica FROM cursos ORDER BY id');
-    const especialitatsRows = await db.query('SELECT id, nom FROM especialitats ORDER BY nom');
+    const categoryRows = await db.query('SELECT category_id, name FROM category ORDER BY category_id LIMIT 5');
+    const filmRows = await db.query('SELECT film_id, title, release_year FROM film ORDER BY film_id LIMIT 5');
+    const actorRows = await db.query(`
+      SELECT a.actor_id, a.first_name, a.last_name, fa.film_id
+      FROM actor a
+      JOIN film_actor fa ON fa.actor_id = a.actor_id
+      JOIN (
+          SELECT film_id
+          FROM film
+          ORDER BY film_id
+          LIMIT 5
+      ) f ON f.film_id = fa.film_id
+    `);
 
     // Transformar les dades a JSON (per les plantilles .hbs)
     // Cal informar de les columnes i els seus tipus
-    const cursosJson = db.table_to_json(cursosRows, { id: 'number', nom: 'string', tematica: 'string' });
-    const especialitatsJson = db.table_to_json(especialitatsRows, { id: 'number', nom: 'string' });
+    const categoryJson = db.table_to_json(categoryRows, { category_id: 'number', name: 'string' });
+    const filmJson = db.table_to_json(filmRows, { film_id: 'number', title: 'string', release_year: 'number' });
+    const actorJson = db.table_to_json(actorRows, { actor_id: 'number', first_name: 'string', last_name: 'string', film_id: 'number' });
 
     // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
     const commonData = JSON.parse(
@@ -74,13 +85,17 @@ app.get('/', async (req, res) => {
 
     // Construir l'objecte de dades per a la plantilla
     const data = {
-      cursos: cursosJson,
-      especialitats: especialitatsJson,
+      category: categoryJson,
+      film: filmJson,
+      actor: actorJson,
       common: commonData
     };
 
     // Renderitzar la plantilla amb les dades
-    res.render('index', data);
+    res.render('index', {
+        ...data,
+        currentPage: 'home'
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send('Error consultant la base de dades');
