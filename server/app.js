@@ -78,6 +78,14 @@ app.get('/', async (req, res) => {
     const filmJson = db.table_to_json(filmRows, { film_id: 'number', title: 'string', release_year: 'number' });
     const actorJson = db.table_to_json(actorRows, { actor_id: 'number', first_name: 'string', last_name: 'string', film_id: 'number' });
 
+    // Asociar actores a cada película
+    const filmsWithActors = filmJson.map(film => {
+      const actorsForFilm = actorJson
+        .filter(actor => actor.film_id === film.film_id)
+        .map(actor => ({ actor_id: actor.actor_id, first_name: actor.first_name, last_name: actor.last_name }));
+      return { ...film, actors: actorsForFilm };
+    });
+
     // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
     const commonData = JSON.parse(
       fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
@@ -86,8 +94,7 @@ app.get('/', async (req, res) => {
     // Construir l'objecte de dades per a la plantilla
     const data = {
       category: categoryJson,
-      film: filmJson,
-      actor: actorJson,
+      film: filmsWithActors,
       common: commonData
     };
 

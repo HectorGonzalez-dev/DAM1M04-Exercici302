@@ -48,3 +48,91 @@ body {
     border-bottom: 2px solid #fbbf24;
     padding-bottom: 4px;
 }
+
+/* Contenedor general */
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    font-family: Arial, sans-serif;
+}
+
+/* Sección de categorías */
+.categories {
+    margin-bottom: 3rem;
+}
+
+.categories h2 {
+    margin-bottom: 1rem;
+    color: #1f2937;
+}
+
+.category-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+}
+
+.category-list li {
+    background-color: #f3f4f6;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+/* Sección de películas */
+.movies h2 {
+    margin-bottom: 1rem;
+    color: #1f2937;
+}
+
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5rem;
+}
+
+.movie-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+.movie-card:hover {
+    transform: translateY(-5px);
+}
+
+.movie-cover {
+    width: 100%;
+    height: 270px;
+    object-fit: cover;
+}
+
+.movie-info {
+    padding: 0.75rem;
+}
+
+.movie-info h3 {
+    font-size: 1.1rem;
+    margin: 0.25rem 0;
+}
+
+.movie-info p {
+    font-size: 0.9rem;
+    margin: 0.15rem 0;
+    color: #4b5563;
+}
+
+.actor {
+    display: inline-block;
+    margin-right: 4px;
+    background-color: #e5e7eb;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+}
