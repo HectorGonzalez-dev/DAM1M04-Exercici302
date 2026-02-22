@@ -10,6 +10,9 @@ body {
     height: 70px;
     padding: 0 2rem;
     background-color: #1f2937;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .logo-container {
@@ -135,4 +138,17 @@ body {
     border-radius: 4px;
     font-size: 0.8rem;
     margin-bottom: 4px;
+}
+
+footer {
+    background-color: #1f2937;
+    color: #ffffff;
+    text-align: center;
+    padding: 1rem 0;
+    font-size: 0.9rem;
+    border-top: 1px solid #374151;
+}
+
+footer span {
+    color: #fbbf24;
 }

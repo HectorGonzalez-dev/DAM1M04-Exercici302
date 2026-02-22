@@ -9,36 +9,36 @@
         {{> menu}}
         <div class="container">
 
-        <!-- Sección de categorías -->
-        <section class="categories">
-            <h2>Categorías destacadas</h2>
-            <ul class="category-list">
-                {{#each category}}
-                    <li>{{name}}</li>
-                {{/each}}
-            </ul>
-        </section>
+            <!-- Sección de categorías -->
+            <section class="categories">
+                <h2>Categorías destacadas</h2>
+                <ul class="category-list">
+                    {{#each category}}
+                        <li>{{name}}</li>
+                    {{/each}}
+                </ul>
+            </section>
 
-        <!-- Sección de películas -->
-        <section class="movies">
-            <h2>Películas destacadas</h2>
-            <div class="movie-grid">
-                {{#each film}}
-                    <div class="movie-card">
-                        <img src="/img/cover_placeholder.png" alt="{{title}} Poster" class="movie-cover">
-                        <div class="movie-info">
-                            <h3>{{title}}</h3>
-                            <p><strong>Año:</strong> {{release_year}}</p>
-                            <p><strong>Actores:</strong></p>
-                            {{#each actors}}
-                                    <span class="actor">{{first_name}} {{last_name}}</span>
-                            {{/each}}
+            <!-- Sección de películas -->
+            <section class="movies">
+                <h2>Películas destacadas</h2>
+                <div class="movie-grid">
+                    {{#each film}}
+                        <div class="movie-card">
+                            <img src="/img/cover_placeholder.png" alt="{{title}} Poster" class="movie-cover">
+                            <div class="movie-info">
+                                <h3>{{title}}</h3>
+                                <p><strong>Año:</strong> {{release_year}}</p>
+                                <p><strong>Actores:</strong></p>
+                                {{#each actors}}
+                                        <span class="actor">{{first_name}} {{last_name}}</span>
+                                {{/each}}
+                            </div>
                         </div>
-                    </div>
-                {{/each}}
-            </div>
-        </section>
-
-    </div>
+                    {{/each}}
+                </div>
+            </section>
+        </div>
+        {{> footer}}
     </body>
 </html>
