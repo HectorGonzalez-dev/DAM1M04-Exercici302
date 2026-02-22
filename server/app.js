@@ -109,6 +109,57 @@ app.get('/', async (req, res) => {
   }
 });
 
+app.get('/movies', async (req, res) => {
+  try {
+    // Obtenir les dades de la base de dades
+    const filmRows = await db.query('SELECT f.film_id, f.title, f.description, f.release_year, f.length, f.rating, l.name FROM film f JOIN language l ON f.language_id = l.language_id ORDER BY film_id LIMIT 15');
+    const actorRows = await db.query(`
+      SELECT a.actor_id, a.first_name, a.last_name, fa.film_id
+      FROM actor a
+      JOIN film_actor fa ON fa.actor_id = a.actor_id
+      JOIN (
+          SELECT film_id
+          FROM film
+          ORDER BY film_id
+          LIMIT 15
+      ) f ON f.film_id = fa.film_id
+    `);
+
+    // Transformar les dades a JSON (per les plantilles .hbs)
+    // Cal informar de les columnes i els seus tipus
+    const filmJson = db.table_to_json(filmRows, { film_id: 'number', title: 'string', description: 'string', release_year: 'number', length: 'number', rating: 'string', name: 'string' });
+    const actorJson = db.table_to_json(actorRows, { actor_id: 'number', first_name: 'string', last_name: 'string', film_id: 'number' });
+
+    // Asociar actores a cada película
+    const filmsWithActors = filmJson.map(film => {
+      const actorsForFilm = actorJson
+        .filter(actor => actor.film_id === film.film_id)
+        .map(actor => ({ actor_id: actor.actor_id, first_name: actor.first_name, last_name: actor.last_name }));
+      return { ...film, actors: actorsForFilm };
+    });
+
+    // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
+    const commonData = JSON.parse(
+      fs.readFileSync(path.join(__dirname, 'data', 'common.json'), 'utf8')
+    );
+
+    // Construir l'objecte de dades per a la plantilla
+    const data = {
+      film: filmsWithActors,
+      common: commonData
+    };
+
+    // Renderitzar la plantilla amb les dades
+    res.render('movies', {
+        ...data,
+        currentPage: 'movies'
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error consultant la base de dades');
+  }
+});
+
 app.get('/cursos', async (req, res) => {
   try {
 
