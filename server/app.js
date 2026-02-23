@@ -160,32 +160,33 @@ app.get('/movies', async (req, res) => {
   }
 });
 
-app.get('/cursos', async (req, res) => {
+app.get('/customers', async (req, res) => {
   try {
-
     // Obtenir les dades de la base de dades
-    const cursosRows = await db.query(`
-      SELECT
-        c.id,
-        c.nom,
-        c.tematica,
-        COALESCE(
-          GROUP_CONCAT(DISTINCT m.nom ORDER BY m.nom SEPARATOR ', '),
-          '—'
-        ) AS mestre_nom
-      FROM cursos c
-      LEFT JOIN mestre_curs mc ON mc.curs_id = c.id
-      LEFT JOIN mestres m ON m.id = mc.mestre_id
-      GROUP BY c.id, c.nom, c.tematica
-      ORDER BY c.id;
+    const filmRows = await db.query('SELECT f.film_id, f.title, f.description, f.release_year, f.length, f.rating, l.name FROM film f JOIN language l ON f.language_id = l.language_id ORDER BY film_id LIMIT 15');
+    const actorRows = await db.query(`
+      SELECT a.actor_id, a.first_name, a.last_name, fa.film_id
+      FROM actor a
+      JOIN film_actor fa ON fa.actor_id = a.actor_id
+      JOIN (
+          SELECT film_id
+          FROM film
+          ORDER BY film_id
+          LIMIT 15
+      ) f ON f.film_id = fa.film_id
     `);
 
     // Transformar les dades a JSON (per les plantilles .hbs)
-    const cursosJson = db.table_to_json(cursosRows, {
-      id: 'number',
-      nom: 'string',
-      tematica: 'string',
-      mestre_nom: 'string'
+    // Cal informar de les columnes i els seus tipus
+    const filmJson = db.table_to_json(filmRows, { film_id: 'number', title: 'string', description: 'string', release_year: 'number', length: 'number', rating: 'string', name: 'string' });
+    const actorJson = db.table_to_json(actorRows, { actor_id: 'number', first_name: 'string', last_name: 'string', film_id: 'number' });
+
+    // Asociar actores a cada película
+    const filmsWithActors = filmJson.map(film => {
+      const actorsForFilm = actorJson
+        .filter(actor => actor.film_id === film.film_id)
+        .map(actor => ({ actor_id: actor.actor_id, first_name: actor.first_name, last_name: actor.last_name }));
+      return { ...film, actors: actorsForFilm };
     });
 
     // Llegir l'arxiu .json amb dades comunes per a totes les pàgines
@@ -195,12 +196,15 @@ app.get('/cursos', async (req, res) => {
 
     // Construir l'objecte de dades per a la plantilla
     const data = {
-      cursos: cursosJson,
+      film: filmsWithActors,
       common: commonData
     };
 
     // Renderitzar la plantilla amb les dades
-    res.render('cursos', data);
+    res.render('customers', {
+        ...data,
+        currentPage: 'customers'
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send('Error consultant la base de dades');
@@ -210,7 +214,7 @@ app.get('/cursos', async (req, res) => {
 // Start server
 const httpServer = app.listen(port, () => {
   console.log(`http://localhost:${port}`);
-  console.log(`http://localhost:${port}/cursos`);
+  console.log(`http://localhost:${port}/movies`);
 });
 
 // Graceful shutdown
