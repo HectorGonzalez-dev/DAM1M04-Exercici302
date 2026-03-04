@@ -26,7 +26,7 @@ if (!isProxmox) {
     port: 3306,
     user: 'super',
     password: '1234',
-    database: 'escola'
+    database: 'sakila'
   });
 }
 
