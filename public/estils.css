@@ -237,3 +237,82 @@ footer span {
     border-radius: 4px;
     font-size: 0.8rem;
 }
+
+/* Sección clientes */
+.customers-section h2 {
+    margin-bottom: 2rem;
+    color: #1f2937;
+}
+
+.customer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.customer-card {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.customer-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+}
+
+.customer-header h3 {
+    margin: 0;
+    color: #111827;
+    font-size: 1.3rem;
+}
+
+.customer-email {
+    margin: 0.3rem 0;
+    color: #4b5563;
+    font-size: 0.95rem;
+}
+
+.customer-id {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.rentals {
+    margin-top: 1rem;
+}
+
+.rentals h4 {
+    margin-bottom: 0.8rem;
+    color: #1f2937;
+}
+
+.rental-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.rental-item {
+    background-color: #f9fafb;
+    padding: 0.8rem 1rem;
+    border-radius: 6px;
+    border-left: 4px solid #fbbf24;
+}
+
+.rental-title {
+    font-weight: 600;
+    margin: 0 0 0.3rem 0;
+    color: #111827;
+}
+
+.rental-info p {
+    margin: 0.15rem 0;
+    font-size: 0.9rem;
+    color: #374151;
+}
