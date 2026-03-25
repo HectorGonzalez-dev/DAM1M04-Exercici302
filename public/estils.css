@@ -1,6 +1,13 @@
 body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
 }
 
 .navbar {
@@ -246,8 +253,8 @@ footer span {
 
 .customer-list {
     display: flex;
-    flex-direction: column;
     gap: 2rem;
+    flex-wrap: wrap;
 }
 
 .customer-card {
@@ -255,6 +262,8 @@ footer span {
     padding: 1.5rem;
     border-radius: 10px;
     box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    flex: 1 1 300px;
+    max-width: 300px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
